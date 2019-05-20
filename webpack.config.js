@@ -3,30 +3,26 @@ var webpack = require('webpack')
 var PACKAGE = require('./package.json');
 var buildVersion = PACKAGE.version;
 var buildName = PACKAGE.name;
-
-var buildVersion = PACKAGE.version;
-var buildName = PACKAGE.name;
-
+var CleanWebpackPlugin = require('clean-webpack-plugin')
+var pathsToClean = [
+  'dist/.'
+]
 module.exports = {
   entry: './src/main.js',
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
-    filename: buildName+'_'+buildVersion+'.js'
+    filename: buildName + '_' + buildVersion + '.js'
   },
   module: {
     rules: [
+
       {
-        test: /\.css$/,
-        use: [
-          'vue-style-loader',
-          'css-loader'
-        ]
-      }, {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
           loaders: {
+            i18n: '@kazupon/vue-i18n-loader'
           }
           // other vue-loader options go here
         }
@@ -36,6 +32,7 @@ module.exports = {
         loader: 'babel-loader',
         exclude: /node_modules/
       },
+
       {
         test: /\.(png|jpg|gif|svg)$/,
         loader: 'file-loader',
@@ -48,20 +45,20 @@ module.exports = {
   resolve: {
     alias: {
       'vue$': 'vue/dist/vue.esm.js'
-    },
-    extensions: ['*', '.js', '.vue', '.json']
+    }
   },
   devServer: {
     historyApiFallback: true,
-    noInfo: true,
-    overlay: true
+    noInfo: true
   },
   performance: {
     hints: false
   },
   devtool: '#eval-source-map'
 }
-
+if (process.env.NODE_ENV === 'development') {
+  module.exports.output.filename = 'build.js'
+}
 if (process.env.NODE_ENV === 'production') {
   module.exports.devtool = '#source-map'
   // http://vue-loader.vuejs.org/en/workflow/production.html
@@ -71,6 +68,7 @@ if (process.env.NODE_ENV === 'production') {
         NODE_ENV: '"production"'
       }
     }),
+    new CleanWebpackPlugin(pathsToClean),
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: true,
       compress: {
