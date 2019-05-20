@@ -165,6 +165,7 @@ export default {
                 console.log("that.currentXEnd");
                 console.log(that.elt_name);
                 that.elt_name = that.elt_id;
+                that.elt_name_tab.push(that.elt_name)
                 that.$set(that.elt_tab, that.elt_name, [
                   {
                     comment: "",
@@ -216,6 +217,7 @@ export default {
       elt: "element_",
       elt_id: "",
       elt_name: "1",
+      elt_name_tab:[],
       xStartNew: 0,
       xEndNew: 0,
       date_file: {
@@ -383,6 +385,7 @@ export default {
       this.date_file = moment(this.selectedDay, "DD MMMMMMM YYYY").format(
         "YYYY-MM-DD"
       );
+      this.delAllElt()
       this.queryService();
     }
   },
@@ -419,10 +422,15 @@ export default {
 
     delCurrentElt: function() {
       $("#" + this.elt_name).remove();
-
       delete this.elt_tab[this.elt_name];
+      console.log("elt",this.elt_tab)
     },
-
+    delAllElt(){
+      this.elt_name_tab.forEach((element_name)=>{
+          $("#" + element_name).remove();
+      delete this.elt_tab[element_name];
+      })
+    },
     ToolTipFollow: function(e) {
       if (this.elt_tab[e.target.id][0].quality != "") {
         console.log("mouse move");
@@ -515,7 +523,7 @@ export default {
             console.log("error");
           }
         );
-   _this.graph.highcharts.chart.series[0].show()
+   
        
     },
 

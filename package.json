@@ -1,7 +1,7 @@
 {
   "name": "aeris-data-validation-vjs",
   "description": "A Vue.js project",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Aeris",
   "license": "MIT",
   "private": true,
